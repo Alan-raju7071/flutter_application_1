@@ -10,18 +10,29 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp)async {
+      await HomeScreenController.getEmployee();
+      setState(() {
+        
+      });
+      
+    },);
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(onPressed: () {
         _customBottomsheet(context);
       },),
       body: ListView.separated(itemBuilder: (context, index) => ListTile(
-        title: Text("name"),
-        subtitle: Text("Designation"),
+        title: Text(HomeScreenController.employeeDataList[index]["name"]),
+        subtitle: Text(HomeScreenController.employeeDataList[index]["designation"]),
 
       ),
        separatorBuilder: (context, index) => Divider(),
-        itemCount: 10),
+        itemCount: HomeScreenController.employeeDataList.length),
 
     );
   }
@@ -48,8 +59,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 Expanded(child: ElevatedButton(onPressed: () {
                   
                 }, child: Text("cancel"))),
-                 Expanded(child: ElevatedButton(onPressed: () {
-                  HomeScreenController.addEmployee();
+                 Expanded(child: ElevatedButton(onPressed: ()async {
+                 await HomeScreenController.addEmployee(name: namecontroller.text,designation: descontroller.text);
+                  setState(() {
+                    
+                  });
+                 
                   Navigator.pop(context);
                   
                 }, child: Text("save"))),

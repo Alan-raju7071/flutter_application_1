@@ -4,6 +4,7 @@ import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
 class HomeScreenController{
   static late Database mydatabase;
+  static List<Map> employeeDataList=[];
 
 
     static  Future initDp() async {
@@ -21,14 +22,14 @@ class HomeScreenController{
       }
 
 
-  static Future addEmployee() async {
+  static Future addEmployee({required String name, required String designation}) async {
    await mydatabase.rawInsert(
       'INSERT INTO Employees(name,designation) VALUES(?,?)',
-      ['aln','alu']);
+      [name,designation]);
       getEmployee();
   }
   static Future getEmployee() async {
-    List<Map> employeeDataList = await mydatabase.rawQuery('SELECT * FROM Employees');
+    employeeDataList = await mydatabase.rawQuery('SELECT * FROM Employees');
     print(employeeDataList);
 
   }
